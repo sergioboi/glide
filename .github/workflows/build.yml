@@ -4,6 +4,11 @@ on:
     push:
     pull_request:
 
+env:
+  GLIDE_GRADLE_REMOTE_CACHE_URL: ${{ secrets.GLIDE_GRADLE_REMOTE_CACHE_URL }}
+  GLIDE_GRADLE_REMOTE_CACHE_USER: ${{ secrets.GLIDE_GRADLE_REMOTE_CACHE_USER }}
+  GLIDE_GRADLE_REMOTE_CACHE_TOKEN: ${{ secrets.GLIDE_GRADLE_REMOTE_CACHE_TOKEN }}
+  
 jobs:
   build:
     runs-on: ubuntu-latest

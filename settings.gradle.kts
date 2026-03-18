@@ -87,3 +87,38 @@ include(":integration:volley")
 include(":testutil")
 
 include(":mocks")
+
+buildCache {
+  local {
+    // Disable local buildcache to maximize use of BuildFetch remote cache.
+    isEnabled = false
+  }
+
+  remote<HttpBuildCache> {
+    // On CI it's easiest to provide Env Vars
+    // On local macOS it's easier to provide ~/.gradle/gradle.properties for consistency between Terminal & IDE
+    val remoteUrl: String? = "GLIDE_GRADLE_REMOTE_CACHE_URL"
+      .let { System.getenv(it) ?: providers.gradleProperty(it).orNull }
+
+    val user: String? = "GLIDE_GRADLE_REMOTE_CACHE_USER"
+      .let { System.getenv(it) ?: providers.gradleProperty(it).orNull }
+
+    val token: String? = "GLIDE_GRADLE_REMOTE_CACHE_TOKEN"
+      .let { System.getenv(it) ?: providers.gradleProperty(it).orNull }
+
+    if (remoteUrl != null && user != null && token != null) {
+      isEnabled = true
+
+      url = uri(remoteUrl.trim())
+
+      credentials {
+        username = user.trim()
+        password = token.trim()
+      }
+
+      isPush = true
+    } else {
+      isEnabled = false
+    }
+  }
+}
