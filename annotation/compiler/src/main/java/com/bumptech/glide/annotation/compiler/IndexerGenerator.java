@@ -7,7 +7,6 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeSpec;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import javax.lang.model.element.Modifier;
@@ -84,20 +83,16 @@ final class IndexerGenerator {
 
   private TypeSpec generate(
       List<TypeElement> libraryModules, Class<? extends Annotation> annotation) {
-    // Sort modules by qualified name to ensure deterministic ordering
-    List<TypeElement> sortedModules = new ArrayList<>(libraryModules);
-    sortedModules.sort(Comparator.comparing(a -> a.getQualifiedName().toString()));
-
     AnnotationSpec.Builder annotationBuilder = AnnotationSpec.builder(Index.class);
 
     String value = getAnnotationValue(annotation);
-    for (TypeElement childModule : sortedModules) {
+    for (TypeElement childModule : libraryModules) {
       annotationBuilder.addMember(value, "$S", ClassName.get(childModule).toString());
     }
 
     StringBuilder indexerNameBuilder =
         new StringBuilder(INDEXER_NAME_PREFIX + annotation.getSimpleName() + "_");
-    for (TypeElement element : sortedModules) {
+    for (TypeElement element : libraryModules) {
       indexerNameBuilder.append(element.getQualifiedName().toString().replace(".", "_"));
       indexerNameBuilder.append("_");
     }

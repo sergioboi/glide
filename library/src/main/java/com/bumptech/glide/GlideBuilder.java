@@ -679,7 +679,7 @@ public final class GlideBuilder {
   /** See {@link #setUseMediaStoreOpenFileApisIfPossible(boolean)}. */
   public static final class UseMediaStoreOpenFileApisIfPossible implements Experiment {}
 
-  /** See {@link #setMemoryCategoryInBackground(MemoryCategory)} */
+  /** See {@link #setMemoryCategoryInBackground(MemoryCategory)}. */
   public static final class MemoryCategoryInBackground implements Experiment {
     private final MemoryCategory memoryCategory;
 
